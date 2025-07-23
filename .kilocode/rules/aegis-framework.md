@@ -1,0 +1,254 @@
+{
+  "Framework": "Aegis Framework: Complete Reference",
+  "CriticalRules": [
+    "Use .context/ (leading dot), never context/",
+    "Use mv for task transitions (never cp)",
+    "Update front matter after moves",
+    "Assume dirs exist (no mkdir -p)",
+    "No duplicate task files",
+    "ALWAYS use current year for all timestamps",
+    "ALWAYS use EXACT current time from metadata (hours:minutes:seconds)",
+    "Each task must have a detailed code checklist, specifying file location, class name, annotation, and step-by-step objectives.",
+    "Checklists must be categorized by technical groups: Entity, Repository, Service, Controller, Test, Logging, Monitoring, Config, Integration, Performance, ... (depending on task).",
+    "Each checklist step must include notes explaining the rationale, considerations, best practices, and common pitfalls.",
+    "Tasks must include Key Considerations, Discussion, Current Status sections."
+  ],
+  "CoreCommands": {
+    "/aegis plan": [
+      "Create/update .context/plan/planning_document.md",
+      "Generate tasks in .context/tasks/planned/",
+      "Maintain task dependencies"
+    ],
+    "/aegis start": [
+      "Begin dev session",
+      "Load project context",
+      "Set initial focus",
+      "Validate task states",
+      "Apply self-improvement recommendations"
+    ],
+    "/aegis save": [
+      "Preserve session progress",
+      "Log in .context/sessions/",
+      "Record decisions in .context/decisions/",
+      "Update task progress",
+      "Perform self-improvement analysis",
+      "Generate insights and recommendations"
+    ],
+    "/aegis status": [
+      "Show current project state",
+      "List active tasks",
+      "Show recent changes + current focus",
+      "Display key self-improvement insights"
+    ],
+    "/aegis task": [
+      "Manage tasks/transitions with mv",
+      "Update task metadata",
+      "Track progress",
+      "Apply pattern-based recommendations"
+    ],
+    "/aegis context": [
+      "Quick context refresh",
+      "Show active tasks, changes, decisions",
+      "Highlight relevant self-improvement insights"
+    ],
+    "/aegis help": [
+      "Show command help/usage"
+    ]
+  },
+  "TaskStateFlow": [
+    ".context/tasks/planned/ → .context/tasks/active/ (start work)",
+    ".context/tasks/active/ → .context/tasks/completed/ (done)",
+    ".context/tasks/active/ → .context/tasks/hold/ (blocked)",
+    ".context/tasks/hold/ → .context/tasks/active/ (unblocked)"
+  ],
+  "FrameworkStructure": [
+    ".context/ (root, with dot)",
+    "AI_INSTRUCTIONS.md (framework instructions)",
+    "ai/operations/ (command patterns)",
+    "memory/ (core/project/session memory)",
+    "memory/project/self_improvement.json (self-improvement data)",
+    "memory/SELF_IMPROVEMENT.md (self-improvement documentation)",
+    "templates/ (document templates)",
+    "tasks/ (planned, active, hold, completed)",
+    "sessions/ (progress logs)",
+    "decisions/ (key decisions)"
+  ],
+  "TaskOperations": {
+    "CreateTask": [
+      "cp .context/templates/tasks/TEMPLATE.md → .context/tasks/planned/TASK-XXX.md",
+      "Then update content + front matter"
+    ],
+    "MoveTask": [
+      "mv .context/tasks/planned/TASK-XXX.md → .context/tasks/active/TASK-XXX.md (correct)",
+      "Never cp tasks"
+    ],
+    "UpdateFrontMatter": [
+      "Update 'status' to match target dir",
+      "Update 'updated' with YYYY-MM-DDTHH:MM:SS (current year, EXACT current time)"
+    ],
+    "TimestampGeneration": [
+      "ALWAYS use current year",
+      "ALWAYS use EXACT current time from metadata (hours:minutes:seconds)",
+      "NEVER use default or placeholder times",
+      "Front matter: YYYY-MM-DDTHH:MM:SS (ISO 8601 with T separator)",
+      "Example: 2025-03-05T12:41:19",
+      "Include timezone when available"
+    ]
+  },
+  "TaskTemplate": {
+    "FrontMatter": [
+      "title, type=task",
+      "status=[planned|active|completed|hold]",
+      "created=YYYY-MM-DDTHH:MM:SS",
+      "updated=YYYY-MM-DDTHH:MM:SS",
+      "id=TASK-XXX",
+      "priority=[high|medium|low]",
+      "memory_types=[procedural|semantic|episodic]",
+      "dependencies, tags"
+    ],
+    "Sections": [
+      "Description",
+      "Objectives",
+      "Checklist (detailed step-by-step code, file location, annotation, objectives)",
+      "Progress (by group: Entity, Repository, Service, Controller, Test, ...)",
+      "Dependencies",
+      "Key Considerations (why use, pros/cons, when to use/not to use, common errors)",
+      "Notes (explanations, practical considerations, best practices)",
+      "Discussion (in-depth discussion, comparison, analysis)",
+      "Next Steps",
+      "Current Status"
+    ]
+  },
+  "RequiredTaskSections": [
+    "Description",
+    "Objectives",
+    "Checklist",
+    "Progress",
+    "Dependencies",
+    "Key Considerations",
+    "Notes",
+    "Discussion",
+    "Next Steps",
+    "Current Status"
+  ],
+  "ChecklistRules": [
+    "Checklist must be divided into technical groups (Entity, Repository, Service, Controller, Test, Logging, Monitoring, Config, Integration, Performance, ...)",
+    "Each checklist step must include explanatory notes, best practices, and common errors"
+  ],
+  "BestPractice": [
+    "Can add Logging, Monitoring, Config, Integration, Performance sections if appropriate for the task",
+    "Place extremely detailed task template files in templates/tasks/DETAILED_TASK_EXAMPLE.md to set the standard for all new tasks"
+  ],
+  "SessionSections": [
+    "Focus",
+    "Context",
+    "Progress",
+    "Decisions",
+    "Self-Improvement",
+    "Dependencies",
+    "Next Steps",
+    "Notes"
+  ],
+  "SelfImprovementFeatures": {
+    "DataStorage": [
+      "Single self_improvement.json file in memory/project/",
+      "Self-Improvement section in session documents",
+      "Documentation in memory/SELF_IMPROVEMENT.md"
+    ],
+    "AnalysisCategories": [
+      "Process insights",
+      "Efficiency insights",
+      "Pattern insights",
+      "Blocker insights"
+    ],
+    "MetricsTracked": [
+      "Time allocation across activities",
+      "Task completion rates and times",
+      "Decision metrics"
+    ],
+    "RecommendationTypes": [
+      "Process improvements",
+      "Efficiency enhancements",
+      "Risk mitigations"
+    ],
+    "PriorityLevels": [
+      "High priority",
+      "Medium priority",
+      "Low priority"
+    ]
+  },
+  "WorkflowIntegrationRules": {
+    "AnalysisAndPlanning": [
+      {
+        "description": "Refer to general principles and rules",
+        "rule": ".kilocode/rules/guidelines.md"
+      },
+      {
+        "description": "Refer to the process of breaking down work from Epics to User Stories",
+        "rule": ".kilocode/rules/rule-build-small-think-big-do-baby-steps.md"
+      }
+    ],
+    "TechnicalDesign": [
+      {
+        "description": "Refer to the rule for creating technical design documents when breaking down Epics into Technical Design Documents",
+        "rule": ".kilocode/rules/technical_design_documentation_rule.md"
+      }
+    ],
+    "TaskBreakdown": [
+      {
+        "description": "Refer to the task breakdown rule when breaking down Technical Design Documents into Tasks",
+        "rule": ".kilocode/rules/break_down_rule.md"
+      }
+    ],
+    "Implementation": [
+      {
+        "description": "Adhere to implementation rules when writing code and updating tasks",
+        "rule": ".kilocode/rules/implementation_rule.md"
+      }
+    ]
+  },
+  "CommonMistakes": [
+    "Creating context/ without dot",
+    "Using cp instead of mv",
+    "mkdir -p for existing dirs",
+    "Skipping template for new tasks",
+    "Modifying template structure",
+    "Missing required fields",
+    "Duplicate tasks",
+    "Using incorrect year in timestamps",
+    "Using default/placeholder times instead of exact current time",
+    "Omitting Self-Improvement section in sessions"
+  ],
+  "ValidationChecklist": [
+    "Paths start with .context/ (dot)",
+    "Use mv (not cp) for transitions",
+    "No mkdir -p",
+    "Update front matter after moves",
+    "Front Matter Timestamps: YYYY-MM-DDTHH:MM:SS (current year, with T separator, EXACT current time)",
+    "File Names: YYYY-MM-DD",
+    "Always use current year for all timestamps",
+    "Always use EXACT current time from metadata for timestamps",
+    "Include Self-Improvement section in session documents"
+  ],
+  "DirectoryDocumentation": [
+    "Each directory has a README.md",
+    "README.md forms a hierarchical doc system",
+    "Root README.md: framework overview",
+    "Component README.md: deeper documentation",
+    "Subdirectory README.md: usage instructions"
+  ],
+  "InstructionPrioritization": [
+    "1. User Instructions",
+    "2. Framework Documentation",
+    "3. Template Usage",
+    "4. Framework Defaults (lowest)"
+  ],
+  "FrameworkValidation": [
+    "Check .context structure exists",
+    "Check required files present",
+    "Validate file permissions",
+    "Verify README.md files exist",
+    "Follow README.md hierarchy",
+    "Validate self_improvement.json format"
+  ]
+} 
