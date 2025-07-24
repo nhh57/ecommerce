@@ -1,9 +1,9 @@
 ---
 title: Triển khai API Giữ chỗ Tồn kho Tạm thời (Soft Reservation)
 type: task
-status: planned
+status: active
 created: 2025-07-24T03:29:29
-updated: 2025-07-24T03:29:29
+updated: 2025-07-24T05:13:48
 id: TASK-INV-003
 priority: high
 memory_types: [procedural]
@@ -25,39 +25,39 @@ Triển khai endpoint `POST /api/inventory/soft-reserve` để xử lý các yê
 ## Danh sách kiểm tra
 
 ### Triển khai Controller
-- [ ] **Thêm phương thức `softReserve()` vào `InventoryController`:**
+- [x] **Thêm phương thức `softReserve()` vào `InventoryController`:**
     - **Ghi chú:** Chú thích với `@PostMapping` và `/api/inventory/soft-reserve`. Nhận `SoftReserveRequestDTO` làm tham số.
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/controller/InventoryController.java`.
     - **Thực hành tốt nhất:** Trả về `ResponseEntity` với `HttpStatus.OK` hoặc `HttpStatus.BAD_REQUEST` tùy thuộc vào kết quả.
     - **Lỗi thường gặp:** Lỗi xác thực đầu vào, không xử lý các trường hợp lỗi nghiệp vụ.
 
 ### Logic Nghiệp vụ Soft Reservation
-- [ ] **Thêm phương thức `softReserve()` vào `InventoryService`:**
+- [x] **Thêm phương thức `softReserve()` vào `InventoryService`:**
     - **Ghi chú:** Xử lý logic giữ chỗ tồn kho. Tiêm `InventoryRepository` và `InventoryLogRepository`.
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/service/InventoryService.java`.
     - **Thực hành tốt nhất:** Sử dụng `@Transactional` để đảm bảo tính nhất quán của giao dịch.
     - **Lỗi thường gặp:** Không xử lý các trường hợp không đủ tồn kho.
-- [ ] **Xác thực yêu cầu và kiểm tra tồn kho:**
+- [x] **Xác thực yêu cầu và kiểm tra tồn kho:**
     - **Ghi chú:** Kiểm tra `productId` hợp lệ và `quantity` lớn hơn 0. Truy xuất `Inventory` entity theo `productId`.
     - **Thực hành tốt nhất:** Kiểm tra `AvailableQuantity` đủ lớn cho yêu cầu.
-- [ ] **Giảm số lượng tồn kho tạm thời:**
+- [x] **Giảm số lượng tồn kho tạm thời:**
     - **Ghi chú:** Giảm `AvailableQuantity` và tăng `ReservedQuantity` trong `Inventory` entity.
     - **Thực hành tốt nhất:** Sử dụng Optimistic Locking (`@Version`) để xử lý cập nhật đồng thời.
-- [ ] **Ghi log thay đổi tồn kho:**
+- [x] **Ghi log thay đổi tồn kho:**
     - **Ghi chú:** Tạo một bản ghi `InventoryLog` cho thao tác Soft Reservation.
 
 ### DTOs
-- [ ] **Tạo `SoftReserveRequestDTO`:**
+- [x] **Tạo `SoftReserveRequestDTO`:**
     - **Ghi chú:** Định nghĩa các trường cần thiết cho yêu cầu (ví dụ: `productId`, `quantity`, `orderId`).
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/dto/SoftReserveRequestDTO.java`.
-- [ ] **Tạo `SoftReserveResponseDTO`:**
+- [x] **Tạo `SoftReserveResponseDTO`:**
     - **Ghi chú:** Định nghĩa các trường cho phản hồi (ví dụ: `success`, `currentAvailableQuantity`).
 
 ## Tiến độ
 
-*   **Triển khai Controller:** [ ]
-*   **Logic Nghiệp vụ Soft Reservation:** [ ]
-*   **DTOs:** [ ]
+*   **Triển khai Controller:** [x]
+*   **Logic Nghiệp vụ Soft Reservation:** [x]
+*   **DTOs:** [x]
 
 ## Phụ thuộc
 
@@ -85,4 +85,4 @@ Tiếp tục với `TASK-INV-004-implement-hard-reservation-event-consumer.md` �
 
 ## Trạng thái hiện tại
 
-Đã lên kế hoạch.
+Đã hoàn thành.

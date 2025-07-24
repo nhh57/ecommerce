@@ -1,9 +1,9 @@
 ---
 title: Triển khai API Tạo đơn hàng và Logic Giữ chỗ Tồn kho Tạm thời
 type: task
-status: planned
+status: active
 created: 2025-07-24T03:21:16
-updated: 2025-07-24T03:21:16
+updated: 2025-07-24T04:47:38
 id: TASK-ORDER-003
 priority: high
 memory_types: [procedural]
@@ -26,39 +26,39 @@ Triển khai endpoint `POST /api/orders` để tạo đơn hàng mới. Nhiệm 
 ## Danh sách kiểm tra
 
 ### Triển khai Controller
-- [ ] **Thêm phương thức `createOrder()` vào `OrderController`:**
+- [x] **Thêm phương thức `createOrder()` vào `OrderController`:**
     - **Ghi chú:** Chú thích với `@PostMapping` và `/api/orders`. Nhận `OrderCreationRequestDTO` làm tham số.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/controller/OrderController.java`.
     - **Thực hành tốt nhất:** Trả về `ResponseEntity` với `HttpStatus.CREATED` nếu thành công.
     - **Lỗi thường gặp:** Thiếu `@RequestBody`, lỗi xác thực đầu vào.
 
 ### Logic Nghiệp vụ Tạo đơn hàng
-- [ ] **Thêm phương thức `createOrder()` vào `OrderService`:**
+- [x] **Thêm phương thức `createOrder()` vào `OrderService`:**
     - **Ghi chú:** Xử lý logic tạo đơn hàng. Tiêm `OrderRepository` và `InventoryServiceClient` (hoặc tương tác với Inventory Service qua một lớp client/feign client).
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/service/OrderService.java`.
     - **Thực hành tốt nhất:** Sử dụng `@Transactional` để đảm bảo tính nhất quán của giao dịch.
     - **Lỗi thường gặp:** Không xử lý các trường hợp ngoại lệ từ Inventory Service.
-- [ ] **Thực hiện cuộc gọi Soft Reservation đến Inventory Service:**
+- [x] **Thực hiện cuộc gọi Soft Reservation đến Inventory Service:**
     - **Ghi chú:** Trước khi lưu đơn hàng, gọi API giữ chỗ tồn kho tạm thời của Inventory Service.
     - **Thực hành tốt nhất:** Xử lý kết quả trả về từ Inventory Service (thành công/thất bại).
     - **Lỗi thường gặp:** Không xử lý trường hợp giữ chỗ tồn kho thất bại (ví dụ: hết hàng).
-- [ ] **Lưu đơn hàng vào `Order DB`:**
+- [x] **Lưu đơn hàng vào `Order DB`:**
     - **Ghi chú:** Nếu Soft Reservation thành công, lưu đơn hàng với trạng thái "Pending Payment".
     - **Thực hành tốt nhất:** Ghi lại `OrderStatusHistory` cho trạng thái ban đầu.
 
 ### DTOs
-- [ ] **Tạo `OrderCreationRequestDTO`:**
+- [x] **Tạo `OrderCreationRequestDTO`:**
     - **Ghi chú:** Định nghĩa các trường cần thiết để tạo đơn hàng (ví dụ: `userId`, `items: [{productId, quantity}]`).
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/dto/OrderCreationRequestDTO.java`.
     - **Thực hành tốt nhất:** Sử dụng các chú thích xác thực (ví dụ: `@NotNull`, `@Min`).
-- [ ] **Tạo `OrderCreationResponseDTO`:**
+- [x] **Tạo `OrderCreationResponseDTO`:**
     - **Ghi chú:** Định nghĩa các trường cho phản hồi sau khi tạo đơn hàng (ví dụ: `orderId`, `status`).
 
 ## Tiến độ
 
-*   **Triển khai Controller:** [ ]
-*   **Logic Nghiệp vụ Tạo đơn hàng:** [ ]
-*   **DTOs:** [ ]
+*   **Triển khai Controller:** [x]
+*   **Logic Nghiệp vụ Tạo đơn hàng:** [x]
+*   **Đối tượng Truyền dữ liệu (DTOs):** [x]
 
 ## Phụ thuộc
 
@@ -86,4 +86,4 @@ Tiếp tục với `TASK-ORDER-004-implement-order-retrieval-cancellation-apis.m
 
 ## Trạng thái hiện tại
 
-Đã lên kế hoạch.
+Đã hoàn thành.

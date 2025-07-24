@@ -1,9 +1,9 @@
 ---
 title: Triển khai API Truy xuất và Hủy đơn hàng
 type: task
-status: planned
+status: active
 created: 2025-07-24T03:21:16
-updated: 2025-07-24T03:21:16
+updated: 2025-07-24T04:58:14
 id: TASK-ORDER-004
 priority: high
 memory_types: [procedural]
@@ -25,20 +25,20 @@ Triển khai các endpoint `GET /api/orders/{id}` để truy xuất thông tin c
 ## Danh sách kiểm tra
 
 ### Triển khai Controller
-- [ ] **Thêm phương thức `getOrderById()` vào `OrderController`:**
+- [x] **Thêm phương thức `getOrderById()` vào `OrderController`:**
     - **Ghi chú:** Chú thích với `@GetMapping` và `/{id}`. Trả về `OrderDetailsDTO`.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/controller/OrderController.java`.
     - **Thực hành tốt nhất:** Xử lý `OrderNotFoundException` bằng cách trả về `HttpStatus.NOT_FOUND`.
-- [ ] **Thêm phương thức `cancelOrder()` vào `OrderController`:**
+- [x] **Thêm phương thức `cancelOrder()` vào `OrderController`:**
     - **Ghi chú:** Chú thích với `@PutMapping` và `/{id}/cancel`.
     - **Thực hành tốt nhất:** Trả về `ResponseEntity` với `HttpStatus.OK` nếu thành công.
 
 ### Logic Nghiệp vụ Truy xuất và Hủy
-- [ ] **Thêm phương thức `getOrderById(Long id)` vào `OrderService`:**
+- [x] **Thêm phương thức `getOrderById(Long id)` vào `OrderService`:**
     - **Ghi chú:** Truy xuất đơn hàng từ `OrderRepository`, tải các `OrderItem` liên quan.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/service/OrderService.java`.
     - **Thực hành tốt nhất:** Sử dụng `Optional` để xử lý trường hợp không tìm thấy đơn hàng.
-- [ ] **Thêm phương thức `cancelOrder(Long id)` vào `OrderService`:**
+- [x] **Thêm phương thức `cancelOrder(Long id)` vào `OrderService`:**
     - **Ghi chú:**
         *   Truy xuất đơn hàng.
         *   Xác thực điều kiện hủy (ví dụ: đơn hàng chưa được xử lý, chưa thanh toán xong).
@@ -47,17 +47,17 @@ Triển khai các endpoint `GET /api/orders/{id}` để truy xuất thông tin c
     - **Thực hành tốt nhất:** Sử dụng `@Transactional` để đảm bảo tính nhất quán. Xử lý các trường hợp không thể hủy (ví dụ: trạng thái không hợp lệ) bằng cách ném ngoại lệ nghiệp vụ.
 
 ### DTOs
-- [ ] **Tạo `OrderDetailsDTO`:**
+- [x] **Tạo `OrderDetailsDTO`:**
     - **Ghi chú:** Định nghĩa các trường chi tiết đơn hàng cho phản hồi API (ví dụ: `orderId`, `userId`, `totalAmount`, `status`, `createdAt`, `updatedAt`, `items: [{productId, quantity, price}]`).
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/dto/OrderDetailsDTO.java`.
-- [ ] **Cập nhật `OrderCreationResponseDTO` (nếu cần):**
+- [x] **Cập nhật `OrderCreationResponseDTO` (nếu cần):**
     - **Ghi chú:** Đảm bảo `OrderDetailsDTO` có thể tái sử dụng hoặc có mối quan hệ với nó.
 
 ## Tiến độ
 
-*   **Triển khai Controller:** [ ]
-*   **Logic Nghiệp vụ Truy xuất và Hủy:** [ ]
-*   **DTOs:** [ ]
+*   **Triển khai Controller:** [x]
+*   **Logic Nghiệp vụ Truy xuất và Hủy:** [x]
+*   **Đối tượng Truyền dữ liệu (DTOs):** [x]
 
 ## Phụ thuộc
 
@@ -84,4 +84,4 @@ Tiếp tục với `TASK-ORDER-005-implement-payment-processing-integration.md` 
 
 ## Trạng thái hiện tại
 
-Đã lên kế hoạch.
+Đã hoàn thành.
