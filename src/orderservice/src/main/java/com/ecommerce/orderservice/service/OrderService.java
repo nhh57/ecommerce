@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import com.ecommerce.orderservice.client.InventoryServiceClient;
 import com.ecommerce.orderservice.client.PaymentServiceClient;
 import com.ecommerce.orderservice.dto.*;
+import com.ecommerce.orderservice.event.OrderCreatedEvent;
 import com.ecommerce.orderservice.model.Order;
 import com.ecommerce.orderservice.model.OrderItem;
 import com.ecommerce.orderservice.model.OrderStatusHistory;
 import com.ecommerce.orderservice.repository.OrderRepository;
 import com.ecommerce.orderservice.repository.OrderStatusHistoryRepository;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,43 +27,54 @@ public class OrderService {
     private final OrderStatusHistoryRepository orderStatusHistoryRepository;
     private final InventoryServiceClient inventoryServiceClient;
     private final PaymentServiceClient paymentServiceClient;
+    private final KafkaTemplate<String, OrderCreatedEvent> kafkaTemplate;
 
     public OrderService(OrderRepository orderRepository, OrderStatusHistoryRepository orderStatusHistoryRepository,
-                            InventoryServiceClient inventoryServiceClient, PaymentServiceClient paymentServiceClient) {
+                            InventoryServiceClient inventoryServiceClient, PaymentServiceClient paymentServiceClient,
+                            KafkaTemplate<String, OrderCreatedEvent> kafkaTemplate) {
         this.orderRepository = orderRepository;
         this.orderStatusHistoryRepository = orderStatusHistoryRepository;
         this.inventoryServiceClient = inventoryServiceClient;
         this.paymentServiceClient = paymentServiceClient;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Transactional
     public OrderCreationResponseDTO createOrder(OrderCreationRequestDTO request) {
         // 1. Perform Soft Reservation with Inventory Service
-        // For simplicity, assuming total amount is calculated on client, but should be verified on backend
-        // Also assuming product prices are validated against a Product Service
         boolean allItemsReserved = true;
         for (OrderItemRequestDTO item : request.getItems()) {
             SoftReserveRequestDTO softReserveRequest = new SoftReserveRequestDTO(item.getProductId(), item.getQuantity(), request.getUserId());
             SoftReserveResponseDTO softReserveResponse = inventoryServiceClient.softReserve(softReserveRequest);
             if (!softReserveResponse.isSuccess()) {
                 allItemsReserved = false;
-                // Handle failure (e.g., log, throw exception, or return specific error)
-                // For now, if any item fails, the whole order creation fails
-                // In a real system, you might want to rollback already reserved items
+                log.error("Soft reservation failed for product {}. Reason: {}", item.getProductId(), softReserveResponse.getMessage());
+                // In a real system, you might want to rollback already reserved items here
                 break;
             }
         }
 
         if (!allItemsReserved) {
-            // In a real system, would need to trigger rollback for already reserved items
             return new OrderCreationResponseDTO(null, "FAILED", "Some items are out of stock or could not be reserved.");
         }
 
-        // 2. Create Order entity
+        // 2. Create Order entity and persist it
         Order order = new Order();
         order.setUserId(request.getUserId());
         order.setTotalAmount(request.getTotalAmount());
         order.setStatus("PENDING_PAYMENT"); // Initial status
+
+        // Create Order Items
+        Order finalOrder = order; // Need a final or effectively final variable for lambda
+        List<OrderItem> orderItems = request.getItems().stream()
+                .map(itemRequest -> new OrderItem(finalOrder, itemRequest.getProductId(), itemRequest.getQuantity(), itemRequest.getPrice()))
+                .collect(Collectors.toList());
+        order.setItems(orderItems);
+
+        // Save order and record initial status history
+        order = orderRepository.save(order);
+        OrderStatusHistory initialStatus = new OrderStatusHistory(order, null, "PENDING_PAYMENT");
+        orderStatusHistoryRepository.save(initialStatus);
 
         // 3. Process Payment
         PaymentRequestDTO paymentRequest = new PaymentRequestDTO(order.getId(), request.getUserId(), request.getTotalAmount(), "USD"); // Assuming USD
@@ -69,27 +82,36 @@ public class OrderService {
         PaymentResponseDTO paymentResponse = paymentServiceClient.processPayment(paymentRequest);
 
         if (!paymentResponse.isSuccess()) {
-            // In a real system, you might want to rollback soft reservations here
             log.error("Payment failed for orderId: {}. Reason: {}", order.getId(), paymentResponse.getMessage());
+            order.setStatus("PAYMENT_FAILED");
+            orderRepository.save(order); // Update order status in DB
+
+            // Publish order.payment.failed event
+            List<OrderCreatedEvent.OrderItemEvent> itemEvents = order.getItems().stream()
+                    .map(item -> new OrderCreatedEvent.OrderItemEvent(item.getProductId(), item.getQuantity()))
+                    .collect(Collectors.toList());
+            OrderCreatedEvent orderPaymentFailedEvent = new OrderCreatedEvent(order.getId(), itemEvents);
+            kafkaTemplate.send("order.payment.failed", order.getId().toString(), orderPaymentFailedEvent);
+            log.info("Published order.payment.failed event for orderId: {}", order.getId());
+
             return new OrderCreationResponseDTO(order.getId(), "PAYMENT_FAILED", paymentResponse.getMessage());
         }
 
         order.setPaymentId(paymentResponse.getTransactionId());
         order.setStatus("PAID"); // Update status to PAID after successful payment
+        orderRepository.save(order); // Save updated status and paymentId
 
-        // Create Order Items
-        Order finalOrder = order;
-        List<OrderItem> orderItems = request.getItems().stream()
-                .map(itemRequest -> new OrderItem(finalOrder, itemRequest.getProductId(), itemRequest.getQuantity(), itemRequest.getPrice()))
+        // Record status history for PAID status
+        OrderStatusHistory paidStatus = new OrderStatusHistory(order, "PENDING_PAYMENT", "PAID");
+        orderStatusHistoryRepository.save(paidStatus);
+
+        // Publish order.created event
+        List<OrderCreatedEvent.OrderItemEvent> itemEvents = order.getItems().stream()
+                .map(item -> new OrderCreatedEvent.OrderItemEvent(item.getProductId(), item.getQuantity()))
                 .collect(Collectors.toList());
-        order.setItems(orderItems);
-
-        // Save order
-        order = orderRepository.save(order);
-
-        // Record status history
-        OrderStatusHistory initialStatus = new OrderStatusHistory(order, null, "PENDING_PAYMENT");
-        orderStatusHistoryRepository.save(initialStatus);
+        OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent(order.getId(), itemEvents);
+        kafkaTemplate.send("order.created", order.getId().toString(), orderCreatedEvent);
+        log.info("Published order.created event for orderId: {}", order.getId());
 
         return new OrderCreationResponseDTO(order.getId(), order.getStatus(), "Order created successfully, pending payment.");
     }
@@ -160,6 +182,13 @@ public class OrderService {
         } else {
             order.setStatus("PAYMENT_FAILED");
             log.warn("Order {} payment failed. Reason: {}", orderId, paymentResponse.getMessage());
+            // Publish order.payment.failed event
+            List<OrderCreatedEvent.OrderItemEvent> itemEvents = order.getItems().stream()
+                    .map(item -> new OrderCreatedEvent.OrderItemEvent(item.getProductId(), item.getQuantity()))
+                    .collect(Collectors.toList());
+            OrderCreatedEvent orderPaymentFailedEvent = new OrderCreatedEvent(order.getId(), itemEvents);
+            kafkaTemplate.send("order.payment.failed", order.getId().toString(), orderPaymentFailedEvent);
+            log.info("Published order.payment.failed event for orderId: {}", order.getId());
         }
         order = orderRepository.save(order);
 

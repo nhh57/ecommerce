@@ -1,9 +1,9 @@
 ---
 title: Triển khai Xuất bản Sự kiện Cập nhật Tồn kho
 type: task
-status: planned
+status: completed
 created: 2025-07-24T03:29:29
-updated: 2025-07-24T03:29:29
+updated: 2025-07-24T09:06:10
 id: TASK-INV-006
 priority: high
 memory_types: [procedural]
@@ -24,28 +24,28 @@ Triển khai logic để xuất bản các sự kiện `inventory.updated` lên 
 ## Danh sách kiểm tra
 
 ### Cấu hình Kafka Producer
-- [ ] **Cấu hình Kafka Producer:**
+- [x] **Cấu hình Kafka Producer:**
     - **Ghi chú:** Thêm các thuộc tính producer Kafka vào `application.properties`/`application.yml` (ví dụ: `spring.kafka.producer.bootstrap-servers`, `key-serializer`, `value-serializer`, `acks`).
     - **Vị trí:** `src/main/resources/application.properties` hoặc `application.yml`.
     - **Thực hành tốt nhất:** Sử dụng `acks=all` và `enable.idempotence=true` để đảm bảo gửi tin nhắn bền vững và bất biến.
     - **Lỗi thường gặp:** Cấu hình serializer không chính xác.
 
 ### Logic Xuất bản Sự kiện
-- [ ] **Thêm phương thức `publishInventoryUpdateEvent()` vào `InventoryService`:**
+- [x] **Thêm phương thức `publishInventoryUpdateEvent()` vào `InventoryService`:**
     - **Ghi chú:** Phương thức này sẽ được gọi sau mỗi thao tác cập nhật tồn kho (Soft Reservation, Hard Reservation, Rollback).
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/service/InventoryService.java`.
     - **Thực hành tốt nhất:** Phương thức này nên nhận `productId` và `newQuantity` (hoặc toàn bộ `Inventory` entity) để tạo sự kiện.
-- [ ] **Tạo sự kiện `inventory.updated`:**
+- [x] **Tạo sự kiện `inventory.updated`:**
     - **Ghi chú:** Định nghĩa cấu trúc sự kiện (ví dụ: `{ "productId": ..., "newQuantity": ..., "oldQuantity": ..., "changeType": ... }`).
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/event/InventoryUpdatedEvent.java`.
-- [ ] **Sử dụng `KafkaTemplate` để gửi sự kiện:**
+- [x] **Sử dụng `KafkaTemplate` để gửi sự kiện:**
     - **Ghi chú:** Tiêm `KafkaTemplate<String, InventoryUpdatedEvent>` vào `InventoryService` và sử dụng nó để gửi sự kiện đến topic `inventory.updated`.
     - **Thực hành tốt nhất:** Sử dụng `productId` làm key của tin nhắn để đảm bảo thứ tự tin nhắn cho cùng một sản phẩm.
 
 ## Tiến độ
 
-*   **Cấu hình Kafka Producer:** [ ]
-*   **Logic Xuất bản Sự kiện:** [ ]
+*   **Cấu hình Kafka Producer:** [x]
+*   **Logic Xuất bản Sự kiện:** [x]
 
 ## Phụ thuộc
 

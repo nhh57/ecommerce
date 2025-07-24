@@ -1,9 +1,9 @@
 ---
 title: Triển khai Xuất bản và Tiêu thụ Sự kiện
 type: task
-status: planned
+status: completed
 created: 2025-07-24T03:21:16
-updated: 2025-07-24T03:21:16
+updated: 2025-07-24T09:12:15
 id: TASK-ORDER-006
 priority: high
 memory_types: [procedural]
@@ -26,27 +26,27 @@ Triển khai logic để xuất bản các sự kiện quan trọng (`order.crea
 ## Danh sách kiểm tra
 
 ### Cấu hình Kafka
-- [ ] **Cấu hình Kafka Producer:**
+- [x] **Cấu hình Kafka Producer:**
     - **Ghi chú:** Thêm các thuộc tính producer Kafka vào `application.properties`/`application.yml` (ví dụ: `spring.kafka.producer.bootstrap-servers`, `key-serializer`, `value-serializer`, `acks`).
     - **Vị trí:** `src/main/resources/application.properties` hoặc `application.yml`.
     - **Thực hành tốt nhất:** Sử dụng `acks=all` và `enable.idempotence=true` để đảm bảo gửi tin nhắn bền vững và bất biến.
     - **Lỗi thường gặp:** Cấu hình serializer không chính xác.
-- [ ] **Cấu hình Kafka Consumer (cho các sự kiện liên quan đến đơn hàng):**
+- [x] **Cấu hình Kafka Consumer (cho các sự kiện liên quan đến đơn hàng):**
     - **Ghi chú:** Thêm các thuộc tính consumer Kafka (ví dụ: `group-id`, `auto-offset-reset`).
     - **Vị trí:** `src/main/resources/application.properties` hoặc `application.yml`.
     - **Thực hành tốt nhất:** Sử dụng một nhóm consumer chuyên dụng.
 
 ### Xuất bản Sự kiện
-- [ ] **Xuất bản sự kiện `order.created`:**
+- [x] **Xuất bản sự kiện `order.created`:**
     - **Ghi chú:** Gọi phương thức xuất bản sự kiện trong `OrderService` sau khi đơn hàng được cập nhật trạng thái "Paid".
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/service/OrderService.java`.
     - **Thực hành tốt nhất:** Đảm bảo sự kiện chứa đầy đủ thông tin cần thiết cho các consumer khác (ví dụ: `orderId`, `userId`, `totalAmount`, `items`).
-- [ ] **Xuất bản sự kiện `order.payment.failed`:**
+- [x] **Xuất bản sự kiện `order.payment.failed`:**
     - **Ghi chú:** Gọi phương thức xuất bản sự kiện trong `OrderService` khi thanh toán thất bại.
     - **Thực hành tốt nhất:** Sự kiện này nên chứa `orderId` và lý do thất bại.
 
 ### Tiêu thụ Sự kiện
-- [ ] **Tạo Kafka Listener cho các sự kiện liên quan đến đơn hàng:**
+- [x] **Tạo Kafka Listener cho các sự kiện liên quan đến đơn hàng:**
     - **Ghi chú:** Ví dụ, một listener cho `order.refund.succeeded` và `order.refund.failed` từ Refund Service.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/listener/OrderEventListener.java`.
     - **Thực hành tốt nhất:** Xử lý các sự kiện bất biến và cập nhật trạng thái đơn hàng trong `Order DB`.
@@ -54,9 +54,9 @@ Triển khai logic để xuất bản các sự kiện quan trọng (`order.crea
 
 ## Tiến độ
 
-*   **Cấu hình Kafka:** [ ]
-*   **Xuất bản Sự kiện:** [ ]
-*   **Tiêu thụ Sự kiện:** [ ]
+*   **Cấu hình Kafka:** [x]
+*   **Xuất bản Sự kiện:** [x]
+*   **Tiêu thụ Sự kiện:** [x]
 
 ## Phụ thuộc
 
