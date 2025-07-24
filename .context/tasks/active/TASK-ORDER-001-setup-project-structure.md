@@ -97,4 +97,4 @@ Tiếp tục với `TASK-ORDER-002-implement-data-model-repository.md` để đ�
 
 ## Trạng thái hiện tại
 
-Đã lên kế hoạch.
+Đã hoàn thành.

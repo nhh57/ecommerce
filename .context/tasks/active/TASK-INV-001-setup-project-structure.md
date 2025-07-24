@@ -1,9 +1,9 @@
 ---
 title: Cấu trúc dự án Dịch vụ Kho hàng
 type: task
-status: planned
+status: active
 created: 2025-07-24T03:29:29
-updated: 2025-07-24T03:29:29
+updated: 2025-07-24T04:17:17
 id: TASK-INV-001
 priority: high
 memory_types: [procedural]

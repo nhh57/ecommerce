@@ -1,9 +1,9 @@
 ---
 title: Triển khai Mô hình Dữ liệu và Repository Đặt hàng
 type: task
-status: planned
+status: active
 created: 2025-07-24T03:21:16
-updated: 2025-07-24T03:21:16
+updated: 2025-07-24T04:37:07
 id: TASK-ORDER-002
 priority: high
 memory_types: [procedural]
@@ -24,39 +24,39 @@ tags: [data-model, repository, persistence, order-service]
 ## Danh sách kiểm tra
 
 ### Định nghĩa thực thể
-- [ ] **Tạo thực thể `Order`:**
+- [x] **Tạo thực thể `Order`:**
     - **Ghi chú:** Ánh xạ tới bảng `Order` trong `Order DB`. Bao gồm các trường như `ID`, `UserID`, `TotalAmount`, `Status`, `CreatedAt`, `UpdatedAt`, `PaymentID`.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/model/Order.java` (hoặc tương tự).
     - **Thực hành tốt nhất:** Sử dụng các chú thích JPA thích hợp (`@Entity`, `@Table`, `@Id`, `@GeneratedValue`, `@Column`).
     - **Lỗi thường gặp:** Thiếu constructor mặc định, ánh xạ cột không chính xác, vấn đề về khóa chính.
-- [ ] **Tạo thực thể `OrderItem`:**
+- [x] **Tạo thực thể `OrderItem`:**
     - **Ghi chú:** Ánh xạ tới bảng `OrderItem`. Bao gồm `ID`, `OrderID`, `ProductID`, `Quantity`, `Price`. Định nghĩa mối quan hệ nhiều-một với `Order`.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/model/OrderItem.java`.
     - **Thực hành tốt nhất:** Sử dụng `@ManyToOne` với `@JoinColumn` cho các mối quan hệ.
     - **Lỗi thường gặp:** Các vấn đề về tải lười (lazy loading), sự phức tạp của mối quan hệ hai chiều.
-- [ ] **Tạo thực thể `OrderStatusHistory`:**
+- [x] **Tạo thực thể `OrderStatusHistory`:**
     - **Ghi chú:** Ánh xạ tới bảng `OrderStatusHistory`. Bao gồm `ID`, `OrderID`, `OldStatus`, `NewStatus`, `ChangedAt`. Định nghĩa mối quan hệ nhiều-một với `Order`.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/model/OrderStatusHistory.java`.
     - **Thực hành tốt nhất:** Đơn giản và rõ ràng để theo dõi lịch sử trạng thái.
     - **Lỗi thường gặp:** Không có lỗi cụ thể.
 
 ### Triển khai Repository
-- [ ] **Tạo giao diện `OrderRepository`:**
+- [x] **Tạo giao diện `OrderRepository`:**
     - **Ghi chú:** Kế thừa `JpaRepository<Order, Long>`.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/repository/OrderRepository.java`.
     - **Thực hành tốt nhất:** Tận dụng các phương thức truy vấn được dẫn xuất của Spring Data JPA cho các truy vấn phổ biến.
     - **Lỗi thường gặp:** Các kiểu generic không chính xác, thiếu `@Repository`.
-- [ ] **Tạo giao diện `OrderItemRepository`:**
+- [x] **Tạo giao diện `OrderItemRepository`:**
     - **Ghi chú:** Kế thừa `JpaRepository<OrderItem, Long>`.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/repository/OrderItemRepository.java`.
-- [ ] **Tạo giao diện `OrderStatusHistoryRepository`:**
+- [x] **Tạo giao diện `OrderStatusHistoryRepository`:**
     - **Ghi chú:** Kế thừa `JpaRepository<OrderStatusHistory, Long>`.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/repository/OrderStatusHistoryRepository.java`.
 
 ## Tiến độ
 
-*   **Định nghĩa thực thể:** [ ]
-*   **Triển khai Repository:** [ ]
+*   **Định nghĩa thực thể:** [x]
+*   **Triển khai Repository:** [x]
 
 ## Phụ thuộc
 
@@ -82,4 +82,4 @@ Tiếp tục với `TASK-ORDER-003-implement-order-creation-api-soft-reservation
 
 ## Trạng thái hiện tại
 
-Đã lên kế hoạch.
+Đã hoàn thành.

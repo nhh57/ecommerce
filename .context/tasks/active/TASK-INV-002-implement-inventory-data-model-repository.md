@@ -1,9 +1,9 @@
 ---
 title: Triển khai Mô hình Dữ liệu và Repository Kho hàng
 type: task
-status: planned
+status: active
 created: 2025-07-24T03:29:29
-updated: 2025-07-24T03:29:29
+updated: 2025-07-24T04:24:30
 id: TASK-INV-002
 priority: high
 memory_types: [procedural]
@@ -24,30 +24,30 @@ tags: [data-model, repository, persistence, inventory-service]
 ## Danh sách kiểm tra
 
 ### Định nghĩa thực thể
-- [ ] **Tạo thực thể `Inventory`:**
+- [x] **Tạo thực thể `Inventory`:**
     - **Ghi chú:** Ánh xạ tới bảng `Inventory` trong `Inventory DB`. Bao gồm các trường như `ProductID`, `AvailableQuantity`, `ReservedQuantity`, `Version`, `LastUpdatedAt`.
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/model/Inventory.java` (hoặc tương tự).
     - **Thực hành tốt nhất:** Sử dụng các chú thích JPA thích hợp (`@Entity`, `@Table`, `@Id`, `@GeneratedValue`, `@Column`, `@Version` cho optimistic locking).
     - **Lỗi thường gặp:** Thiếu constructor mặc định, ánh xạ cột không chính xác, vấn đề về khóa chính.
-- [ ] **Tạo thực thể `InventoryLog`:**
+- [x] **Tạo thực thể `InventoryLog`:**
     - **Ghi chú:** Ánh xạ tới bảng `InventoryLog`. Bao gồm `LogID`, `ProductID`, `ChangeType`, `QuantityChange`, `NewQuantity`, `Timestamp`, `OrderID`.
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/model/InventoryLog.java`.
     - **Thực hành tốt nhất:** Đơn giản và rõ ràng để theo dõi lịch sử thay đổi tồn kho.
 
 ### Triển khai Repository
-- [ ] **Tạo giao diện `InventoryRepository`:**
+- [x] **Tạo giao diện `InventoryRepository`:**
     - **Ghi chú:** Kế thừa `JpaRepository<Inventory, Long>`.
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/repository/InventoryRepository.java`.
     - **Thực hành tốt nhất:** Tận dụng các phương thức truy vấn được dẫn xuất của Spring Data JPA (ví dụ: `findByProductId`).
     - **Lỗi thường gặp:** Các kiểu generic không chính xác, thiếu `@Repository`.
-- [ ] **Tạo giao diện `InventoryLogRepository`:**
+- [x] **Tạo giao diện `InventoryLogRepository`:**
     - **Ghi chú:** Kế thừa `JpaRepository<InventoryLog, Long>`.
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/repository/InventoryLogRepository.java`.
 
 ## Tiến độ
 
-*   **Định nghĩa thực thể:** [ ]
-*   **Triển khai Repository:** [ ]
+*   **Định nghĩa thực thể:** [x]
+*   **Triển khai Repository:** [x]
 
 ## Phụ thuộc
 
@@ -73,4 +73,4 @@ Tiếp tục với `TASK-INV-003-implement-soft-reservation-api.md` để triể
 
 ## Trạng thái hiện tại
 
-Đã lên kế hoạch.
+Đã hoàn thành.
