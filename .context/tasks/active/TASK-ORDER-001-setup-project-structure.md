@@ -1,9 +1,9 @@
 ---
 title: Cấu trúc dự án Dịch vụ Đặt hàng
 type: task
-status: planned
+status: active
 created: 2025-07-24T03:21:16
-updated: 2025-07-24T03:21:16
+updated: 2025-07-24T04:09:45
 id: TASK-ORDER-001
 priority: high
 memory_types: [procedural]

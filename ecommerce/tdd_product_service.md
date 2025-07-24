@@ -23,10 +23,11 @@ Dịch vụ Sản phẩm (Product Service) chịu trách nhiệm quản lý thô
 
 ### 3.1. Thay đổi Mô hình Dữ liệu
 
-*   **Product DB:**
+*   **Product DB (MySQL):**
     *   `Product` (ID, Name, Description, Price, ImageURLs, DisplayStatus (e.g., "Còn hàng", "Hết hàng"), CategoryID, ...).
     *   `ProductAttribute` (ID, ProductID, AttributeName, AttributeValue, ...).
     *   `ProductCategory` (ID, Name, ...).
+    *   **Lưu ý:** Sử dụng kiểu dữ liệu phù hợp với MySQL. Ví dụ, `VARCHAR` cho chuỗi, `DECIMAL` cho giá, `TEXT` cho mô tả dài, `DATETIME` cho timestamp.
 
 ### 3.2. Thay đổi API
 

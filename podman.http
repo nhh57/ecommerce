@@ -1,0 +1,5 @@
+### getAllProducts
+GET http://localhost:1122/api/products HTTP/1.1
+
+### getProductById
+GET http://localhost:1122/api/products/1 HTTP/1.1
