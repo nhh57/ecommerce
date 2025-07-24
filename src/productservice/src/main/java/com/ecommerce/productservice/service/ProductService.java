@@ -31,7 +31,10 @@ public class ProductService {
     public List<ProductDTO> getAllProducts() {
         log.info("Fetching all products from database.");
         return productRepository.findAll().stream()
-                .map(this::convertToDto)
+                .map(x->{
+                    log.info("Product found: {}", x);
+                    return convertToDto(x);
+                })
                 .collect(Collectors.toList());
     }
 

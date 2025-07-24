@@ -1,8 +1,8 @@
 -- Insert sample data for product_categories
-INSERT INTO product_categories (name) VALUES
-('Electronics'),
-('Books'),
-('Clothing');
+INSERT INTO product_categories (id, name) VALUES
+(1, 'Electronics'),
+(2, 'Books'),
+(3, 'Clothing');
 
 -- Insert sample data for products
 INSERT INTO products (name, description, price, display_status, category_id, image_urls, created_at, updated_at) VALUES
