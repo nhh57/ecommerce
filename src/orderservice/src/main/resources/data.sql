@@ -1,9 +1,9 @@
 -- Insert sample data for orders
 INSERT INTO orders (user_id, total_amount, status, created_at, updated_at, payment_id) VALUES
-(1, 1200.00, 'PENDING_PAYMENT', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), NULL),
-(1, 25.50, 'PAID', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'PAY123'),
-(2, 15.00, 'PENDING_PAYMENT', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), NULL),
-(3, 800.00, 'PAID', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), 'PAY456');
+(1, 1200.00, 'PENDING_PAYMENT', NOW(), NOW(), NULL),
+(1, 25.50, 'PAID', NOW(), NOW(), 'PAY123'),
+(2, 15.00, 'PENDING_PAYMENT', NOW(), NOW(), NULL),
+(3, 800.00, 'PAID', NOW(), NOW(), 'PAY456');
 
 -- Insert sample data for order_items
 INSERT INTO order_items (order_id, product_id, quantity, price) VALUES
@@ -14,9 +14,9 @@ INSERT INTO order_items (order_id, product_id, quantity, price) VALUES
 
 -- Insert sample data for order_status_history
 INSERT INTO order_status_history (order_id, old_status, new_status, changed_at) VALUES
-(1, 'DONE', 'PENDING_PAYMENT', CURRENT_TIMESTAMP()),
-(2, 'DONE', 'PENDING_PAYMENT', CURRENT_TIMESTAMP()),
-(2, 'PENDING_PAYMENT', 'PAID', CURRENT_TIMESTAMP()),
-(3, 'DONE', 'PENDING_PAYMENT', CURRENT_TIMESTAMP()),
-(4, 'DONE', 'PENDING_PAYMENT', CURRENT_TIMESTAMP()),
-(4, 'PENDING_PAYMENT', 'PAID', CURRENT_TIMESTAMP());
+(1, NULL, 'PENDING_PAYMENT', NOW()),
+(2, NULL, 'PENDING_PAYMENT', NOW()),
+(2, 'PENDING_PAYMENT', 'PAID', NOW()),
+(3, NULL, 'PENDING_PAYMENT', NOW()),
+(4, NULL, 'PENDING_PAYMENT', NOW()),
+(4, 'PENDING_PAYMENT', 'PAID', NOW());

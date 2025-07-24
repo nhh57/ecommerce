@@ -36,7 +36,7 @@ public class ProductService {
 
     // Helper method to convert Product entity to ProductDTO
     private ProductDTO convertToDto(Product product) {
-        List<String> imageUrls = product.getImageUrls();
+        String imageUrls = product.getImageUrls();
         String categoryName = (product.getCategory() != null) ? product.getCategory().getName() : null;
         List<ProductAttributeDTO> attributeDTOs = product.getAttributes().stream()
                 .map(attr -> new ProductAttributeDTO(attr.getAttributeName(), attr.getAttributeValue()))

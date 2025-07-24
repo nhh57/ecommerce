@@ -15,7 +15,7 @@ public class OrderStatusHistory {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String oldStatus;
 
     @Column(nullable = false)

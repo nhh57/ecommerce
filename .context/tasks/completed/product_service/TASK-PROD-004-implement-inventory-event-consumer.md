@@ -1,9 +1,9 @@
 ---
 title: Triển khai Consumer Sự kiện Tồn kho
 type: task
-status: active
+status: completed
 created: 2025-07-24T03:00:34
-updated: 2025-07-24T04:05:48
+updated: 2025-07-24T07:27:00
 id: TASK-PROD-004
 priority: high
 memory_types: [procedural]
@@ -25,24 +25,24 @@ Triển khai logic để tiêu thụ các sự kiện `inventory.updated` từ K
 ## Danh sách kiểm tra
 
 ### Thiết lập Consumer Kafka
-- [ ] **Cấu hình Kafka Listener:**
+- [x] **Cấu hình Kafka Listener:**
     - **Ghi chú:** Thêm các thuộc tính consumer Kafka vào `application.properties`/`application.yml` (ví dụ: `spring.kafka.consumer.bootstrap-servers`, `group-id`, `auto-offset-reset`).
     - **Vị trí:** `src/main/resources/application.properties` hoặc `application.yml`.
     - **Thực hành tốt nhất:** Sử dụng một nhóm consumer chuyên dụng cho Dịch vụ Sản phẩm để cho phép mở rộng độc lập.
     - **Lỗi thường gặp:** Địa chỉ bootstrap server không chính xác, xung đột group ID.
-- [ ] **Tạo lớp Kafka Listener:**
+- [x] **Tạo lớp Kafka Listener:**
     - **Ghi chú:** Chú thích một phương thức với `@KafkaListener(topics = "inventory.updated", groupId = "product-service-group")`.
     - **Vị trí:** `src/main/java/com/ecommerce/productservice/listener/InventoryUpdateListener.java` (hoặc tương tự).
     - **Thực hành tốt nhất:** Giữ cho các phương thức listener tập trung vào việc tiêu thụ và ủy quyền cho một lớp dịch vụ để xử lý.
     - **Lỗi thường gặp:** Tên topic không chính xác, thiếu `@EnableKafka` trên lớp ứng dụng chính.
 
 ### Logic Xử lý Sự kiện
-- [ ] **Định nghĩa cấu trúc thông báo sự kiện:**
+- [x] **Định nghĩa cấu trúc thông báo sự kiện:**
     - **Ghi chú:** Hiểu cấu trúc JSON/Avro/Protobuf mong đợi của sự kiện `inventory.updated` (ví dụ: `{ "productId": 123, "newQuantity": 0 }`). Tạo một DTO/POJO tương ứng.
     - **Vị trí:** `src/main/java/com/ecommerce/productservice/event/InventoryUpdatedEvent.java`.
     - **Thực hành tốt nhất:** Sử dụng một schema registry (nếu có) cho sự tiến hóa schema.
     - **Lỗi thường gặp:** Schema không khớp dẫn đến lỗi deserialization.
-- [ ] **Triển khai logic cập nhật trạng thái sản phẩm:**
+- [x] **Triển khai logic cập nhật trạng thái sản phẩm:**
     - **Ghi chú:** Trong phương thức Kafka listener, trích xuất `productId` và `newQuantity`. Sử dụng `ProductRepository` để tìm sản phẩm và cập nhật `DisplayStatus` của nó dựa trên `newQuantity` (ví dụ: nếu `newQuantity == 0`, đặt thành "Hết hàng"; ngược lại, "Còn hàng").
     - **Vị trí:** `src/main/java/com/ecommerce/productservice/service/ProductService.java` (thêm một phương thức như `updateProductDisplayStatus(Long productId, int newQuantity)`).
     - **Thực hành tốt nhất:** Đảm bảo thao tác cập nhật là bất biến (idempotent) để xử lý các thông báo trùng lặp. Sử dụng cập nhật giao dịch.
@@ -50,8 +50,8 @@ Triển khai logic để tiêu thụ các sự kiện `inventory.updated` từ K
 
 ## Tiến độ
 
-*   **Thiết lập Consumer Kafka:** [ ]
-*   **Logic Xử lý Sự kiện:** [ ]
+*   **Thiết lập Consumer Kafka:** [x]
+*   **Logic Xử lý Sự kiện:** [x]
 
 ## Phụ thuộc
 

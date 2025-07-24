@@ -1,9 +1,9 @@
 ---
 title: Triển khai Mô hình Dữ liệu và Repository Sản phẩm
 type: task
-status: active
+status: completed
 created: 2025-07-24T03:00:34
-updated: 2025-07-24T03:44:45
+updated: 2025-07-24T07:23:25
 id: TASK-PROD-002
 priority: high
 memory_types: [procedural]
@@ -24,39 +24,39 @@ tags: [data-model, repository, persistence, product-service]
 ## Danh sách kiểm tra
 
 ### Định nghĩa thực thể
-- [ ] **Tạo thực thể `Product`:**
+- [x] **Tạo thực thể `Product`:**
     - **Ghi chú:** Ánh xạ tới bảng `Product` trong `Product DB`. Bao gồm các trường như `ID`, `Name`, `Description`, `Price`, `ImageURLs`, `DisplayStatus`, `CategoryID`.
     - **Vị trí:** `src/main/java/com/ecommerce/productservice/model/Product.java` (hoặc tương tự).
     - **Thực hành tốt nhất:** Sử dụng các chú thích JPA thích hợp (`@Entity`, `@Table`, `@Id`, `@GeneratedValue`, `@Column`). Cân nhắc `Lob` cho `ImageURLs` nếu lưu trữ văn bản/JSON lớn, hoặc một thực thể riêng để quản lý hình ảnh.
     - **Lỗi thường gặp:** Thiếu constructor mặc định, ánh xạ cột không chính xác, các vấn đề về khóa chính.
-- [ ] **Tạo thực thể `ProductAttribute`:**
+- [x] **Tạo thực thể `ProductAttribute`:**
     - **Ghi chú:** Ánh xạ tới bảng `ProductAttribute`. Bao gồm `ID`, `ProductID`, `AttributeName`, `AttributeValue`. Định nghĩa mối quan hệ nhiều-một với `Product`.
     - **Vị trí:** `src/main/java/com/ecommerce/productservice/model/ProductAttribute.java`.
     - **Thực hành tốt nhất:** Sử dụng `@ManyToOne` với `@JoinColumn` cho các mối quan hệ.
     - **Lỗi thường gặp:** Các vấn đề về tải lười (lazy loading), sự phức tạp của mối quan hệ hai chiều.
-- [ ] **Tạo thực thể `ProductCategory`:**
+- [x] **Tạo thực thể `ProductCategory`:**
     - **Ghi chú:** Ánh xạ tới bảng `ProductCategory`. Bao gồm `ID`, `Name`.
     - **Vị trí:** `src/main/java/com/ecommerce/productservice/model/ProductCategory.java`.
     - **Thực hành tốt nhất:** Thực thể đơn giản.
     - **Lỗi thường gặp:** Không có lỗi cụ thể.
 
 ### Triển khai Repository
-- [ ] **Tạo giao diện `ProductRepository`:**
+- [x] **Tạo giao diện `ProductRepository`:**
     - **Ghi chú:** Kế thừa `JpaRepository<Product, Long>`.
     - **Vị trí:** `src/main/java/com/ecommerce/productservice/repository/ProductRepository.java`.
     - **Thực hành tốt nhất:** Tận dụng các phương thức truy vấn được dẫn xuất của Spring Data JPA cho các truy vấn phổ biến (ví dụ: `findByCategoryId`).
     - **Lỗi thường gặp:** Các kiểu generic không chính xác, thiếu `@Repository` (mặc dù Spring Data JPA thường suy luận được).
-- [ ] **Tạo giao diện `ProductAttributeRepository`:**
+- [x] **Tạo giao diện `ProductAttributeRepository`:**
     - **Ghi chú:** Kế thừa `JpaRepository<ProductAttribute, Long>`.
     - **Vị trí:** `src/main/java/com/ecommerce/productservice/repository/ProductAttributeRepository.java`.
-- [ ] **Tạo giao diện `ProductCategoryRepository`:**
+- [x] **Tạo giao diện `ProductCategoryRepository`:**
     - **Ghi chú:** Kế thừa `JpaRepository<ProductCategory, Long>`.
     - **Vị trí:** `src/main/java/com/ecommerce/productservice/repository/ProductCategoryRepository.java`.
 
 ## Tiến độ
 
-*   **Định nghĩa thực thể:** [ ]
-*   **Triển khai Repository:** [ ]
+*   **Định nghĩa thực thể:** [x]
+*   **Triển khai Repository:** [x]
 
 ## Phụ thuộc
 

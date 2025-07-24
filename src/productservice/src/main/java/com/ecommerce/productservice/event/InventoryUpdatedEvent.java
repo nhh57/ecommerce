@@ -4,7 +4,6 @@ public class InventoryUpdatedEvent {
     private Long productId;
     private int newQuantity;
 
-    // Constructors
     public InventoryUpdatedEvent() {
     }
 
@@ -13,7 +12,6 @@ public class InventoryUpdatedEvent {
         this.newQuantity = newQuantity;
     }
 
-    // Getters and Setters
     public Long getProductId() {
         return productId;
     }

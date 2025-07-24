@@ -13,22 +13,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
-
-    @Column(length = 1000)
     private String description;
-
-    @Column(nullable = false)
     private BigDecimal price;
 
-    @ElementCollection
-    @CollectionTable(name = "product_image_urls", joinColumns = @JoinColumn(name = "product_id"))
-    @Column(name = "image_url")
-    private List<String> imageUrls;
+    @Column(name = "image_urls", columnDefinition = "TEXT")
+    private String imageUrls; // Storing as JSON string or comma-separated for simplicity
 
-    @Column(nullable = false)
-    private String displayStatus; // e.g., "Còn hàng", "Hết hàng"
+    private String displayStatus; // e.g., "In Stock", "Out of Stock"
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -37,17 +29,17 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductAttribute> attributes;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     // Constructors
     public Product() {
     }
 
-    public Product(String name, String description, BigDecimal price, List<String> imageUrls, String displayStatus, ProductCategory category) {
+    public Product(String name, String description, BigDecimal price, String imageUrls, String displayStatus, ProductCategory category) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -89,11 +81,11 @@ public class Product {
         this.price = price;
     }
 
-    public List<String> getImageUrls() {
+    public String getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
+    public void setImageUrls(String imageUrls) {
         this.imageUrls = imageUrls;
     }
 
@@ -139,12 +131,12 @@ public class Product {
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 }

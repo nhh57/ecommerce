@@ -8,7 +8,7 @@ public class ProductDTO {
     private String name;
     private String description;
     private BigDecimal price;
-    private List<String> imageUrls;
+    private String imageUrls;
     private String displayStatus;
     private String categoryName; // Display category name directly
     private List<ProductAttributeDTO> attributes; // Nested DTO for attributes
@@ -17,7 +17,7 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, String name, String description, BigDecimal price, List<String> imageUrls, String displayStatus, String categoryName, List<ProductAttributeDTO> attributes) {
+    public ProductDTO(Long id, String name, String description, BigDecimal price, String imageUrls, String displayStatus, String categoryName, List<ProductAttributeDTO> attributes) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -61,11 +61,11 @@ public class ProductDTO {
         this.price = price;
     }
 
-    public List<String> getImageUrls() {
+    public String getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
+    public void setImageUrls(String imageUrls) {
         this.imageUrls = imageUrls;
     }
 

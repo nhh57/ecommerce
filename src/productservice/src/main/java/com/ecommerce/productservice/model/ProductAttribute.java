@@ -1,7 +1,6 @@
 package com.ecommerce.productservice.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "product_attributes")
@@ -15,17 +14,11 @@ public class ProductAttribute {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(nullable = false)
+    @Column(name = "attribute_name", nullable = false)
     private String attributeName;
 
-    @Column(nullable = false)
+    @Column(name = "attribute_value", nullable = false)
     private String attributeValue;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
 
     // Constructors
     public ProductAttribute() {
@@ -68,32 +61,5 @@ public class ProductAttribute {
 
     public void setAttributeValue(String attributeValue) {
         this.attributeValue = attributeValue;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
     }
 }
