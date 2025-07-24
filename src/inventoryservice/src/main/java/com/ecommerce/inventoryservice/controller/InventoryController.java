@@ -1,5 +1,7 @@
 package com.ecommerce.inventoryservice.controller;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.ecommerce.inventoryservice.dto.SoftReserveRequestDTO;
 import com.ecommerce.inventoryservice.dto.SoftReserveResponseDTO;
 import com.ecommerce.inventoryservice.service.InventoryService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/inventory")
 public class InventoryController {
 

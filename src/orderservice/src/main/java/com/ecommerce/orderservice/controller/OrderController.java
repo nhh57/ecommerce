@@ -1,14 +1,18 @@
 package com.ecommerce.orderservice.controller;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.ecommerce.orderservice.dto.OrderCreationRequestDTO;
 import com.ecommerce.orderservice.dto.OrderCreationResponseDTO;
 import com.ecommerce.orderservice.dto.OrderDetailsDTO;
+import com.ecommerce.orderservice.dto.PaymentResponseDTO;
 import com.ecommerce.orderservice.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/orders")
 public class OrderController {
 
@@ -45,6 +49,18 @@ public class OrderController {
             OrderDetailsDTO cancelledOrder = orderService.cancelOrder(id);
             return ResponseEntity.ok(cancelledOrder);
         } catch (RuntimeException e) { // Catch custom exception for inability to cancel or not found
+            return ResponseEntity.badRequest().build(); // Or other appropriate status
+        }
+    }
+
+    @PostMapping("/{id}/payment-callback")
+    public ResponseEntity<OrderDetailsDTO> handlePaymentCallback(@PathVariable Long id, @RequestBody PaymentResponseDTO paymentResponse) {
+        log.info("Received payment callback for orderId: {} with status: {}", id, paymentResponse.isSuccess() ? "SUCCESS" : "FAILED");
+        try {
+            OrderDetailsDTO updatedOrder = orderService.processPaymentCallback(id, paymentResponse);
+            return ResponseEntity.ok(updatedOrder);
+        } catch (RuntimeException e) { // Catch custom exception for Order Not Found or payment logic issues
+            log.error("Error processing payment callback for orderId: {}", id, e);
             return ResponseEntity.badRequest().build(); // Or other appropriate status
         }
     }

@@ -1,9 +1,9 @@
 ---
 title: Triển khai Tích hợp Xử lý Thanh toán
 type: task
-status: planned
+status: completed
 created: 2025-07-24T03:21:16
-updated: 2025-07-24T03:21:16
+updated: 2025-07-24T08:18:20
 id: TASK-ORDER-005
 priority: high
 memory_types: [procedural]
@@ -25,22 +25,22 @@ Triển khai tích hợp với Dịch vụ Thanh toán (Payment Service) để x
 ## Danh sách kiểm tra
 
 ### Tích hợp với Payment Service
-- [ ] **Tạo client cho Payment Service:**
+- [x] **Tạo client cho Payment Service:**
     - **Ghi chú:** Sử dụng Feign Client, WebClient, hoặc RestTemplate để giao tiếp với Payment Service.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/client/PaymentServiceClient.java` (hoặc tương tự).
     - **Thực hành tốt nhất:** Định nghĩa một interface client rõ ràng với các phương thức tương ứng với API của Payment Service.
     - **Lỗi thường gặp:** Cấu hình URL không chính xác, lỗi serialization/deserialization.
-- [ ] **Gửi yêu cầu thanh toán:**
+- [x] **Gửi yêu cầu thanh toán:**
     - **Ghi chú:** Trong `OrderService` (sau khi Soft Reservation thành công), gọi phương thức `processPayment()` của PaymentServiceClient.
     - **Thực hành tốt nhất:** Truyền đủ thông tin đơn hàng và người dùng cho Payment Service.
     - **Lỗi thường gặp:** Không xử lý các ngoại lệ từ Payment Service.
 
 ### Xử lý Callback Thanh toán
-- [ ] **Tạo endpoint `payment-callback` trong `OrderController`:**
+- [x] **Tạo endpoint `payment-callback` trong `OrderController`:**
     - **Ghi chú:** Chú thích với `@PostMapping("/api/orders/{id}/payment-callback")`. Endpoint này sẽ nhận kết quả thanh toán từ Payment Service.
     - **Vị trí:** `src/main/java/com/ecommerce/orderservice/controller/OrderController.java`.
     - **Thực hành tốt nhất:** Bảo vệ endpoint này bằng các biện pháp bảo mật thích hợp (ví dụ: IP whitelist, shared secret) vì nó là callback từ hệ thống bên ngoài.
-- [ ] **Triển khai logic xử lý callback trong `OrderService`:**
+- [x] **Triển khai logic xử lý callback trong `OrderService`:**
     - **Ghi chú:**
         *   Nhận kết quả thanh toán (thành công/thất bại).
         *   Cập nhật trạng thái đơn hàng (`Status`) trong `Order DB` thành "Paid" hoặc "Payment Failed".
@@ -49,8 +49,8 @@ Triển khai tích hợp với Dịch vụ Thanh toán (Payment Service) để x
 
 ## Tiến độ
 
-*   **Tích hợp với Payment Service:** [ ]
-*   **Xử lý Callback Thanh toán:** [ ]
+*   **Tích hợp với Payment Service:** [x]
+*   **Xử lý Callback Thanh toán:** [x]
 
 ## Phụ thuộc
 

@@ -1,9 +1,9 @@
 ---
 title: Triển khai Chiến lược Caching Sản phẩm
 type: task
-status: planned
+status: completed
 created: 2025-07-24T03:00:34
-updated: 2025-07-24T03:00:34
+updated: 2025-07-24T08:12:30
 id: TASK-PROD-005
 priority: medium
 memory_types: [procedural]
@@ -25,24 +25,24 @@ Tích hợp Redis/Memcached để caching dữ liệu sản phẩm nhằm cải 
 ## Danh sách kiểm tra
 
 ### Cấu hình Caching
-- [ ] **Thêm phụ thuộc Caching:**
+- [x] **Thêm phụ thuộc Caching:**
     - **Ghi chú:** Bao gồm `spring-boot-starter-data-redis` (cho Redis) hoặc `spring-boot-starter-cache`.
     - **Vị trí:** `pom.xml` hoặc `build.gradle`.
     - **Thực hành tốt nhất:** Chọn giải pháp caching dựa trên nhu cầu dự án (Redis cho phân tán, Caffeine cho cục bộ).
     - **Lỗi thường gặp:** Thiếu phụ thuộc, phiên bản không chính xác.
-- [ ] **Cấu hình Cache Manager:**
+- [x] **Cấu hình Cache Manager:**
     - **Ghi chú:** Kích hoạt caching với `@EnableCaching` và cấu hình `CacheManager` (ví dụ: `RedisCacheManager`).
     - **Vị trí:** Lớp ứng dụng chính hoặc một lớp cấu hình chuyên dụng.
     - **Thực hành tốt nhất:** Tùy chỉnh tên cache, TTL và serialization.
     - **Lỗi thường gặp:** Chi tiết kết nối Redis không chính xác.
 
 ### Triển khai Caching
-- [ ] **Áp dụng Caching cho các phương thức của `ProductService`:**
+- [x] **Áp dụng Caching cho các phương thức của `ProductService`:**
     - **Ghi chú:** Sử dụng chú thích `@Cacheable` của Spring trên các phương thức như `getAllProducts()` và `getProductById(Long id)` trong `ProductService`.
     - **Vị trí:** `src/main/java/com/ecommerce/productservice/service/ProductService.java`.
     - **Thực hành tốt nhất:** Sử dụng SpEL cho các khóa cache động (ví dụ: `@Cacheable(value="products", key="#id")`).
     - **Lỗi thường gặp:** Caching các đối tượng có thể thay đổi mà không sao chép phòng thủ, khóa cache không chính xác dẫn đến lỗi cache.
-- [ ] **Định nghĩa Khóa Cache và TTL:**
+- [x] **Định nghĩa Khóa Cache và TTL:**
     - **Ghi chú:**
         *   `product:{productId}` cho chi tiết sản phẩm riêng lẻ (ví dụ: TTL 1 giờ).
         *   `products:category:{categoryId}` cho danh sách sản phẩm theo danh mục (ví dụ: TTL 15-30 phút).
@@ -51,15 +51,15 @@ Tích hợp Redis/Memcached để caching dữ liệu sản phẩm nhằm cải 
     - **Lỗi thường gặp:** TTL quá ngắn dẫn đến lỗi cache thường xuyên, TTL quá dài dẫn đến dữ liệu cũ.
 
 ### Vô hiệu hóa Cache (Cân nhắc)
-- [ ] **Lập kế hoạch Vô hiệu hóa Cache:**
+- [x] **Lập kế hoạch Vô hiệu hóa Cache:**
     - **Ghi chú:** Mặc dù Dịch vụ Sản phẩm là một consumer, nếu có hệ thống PIM (Quản lý Thông tin Sản phẩm) cập nhật chi tiết sản phẩm, nó sẽ cần kích hoạt vô hiệu hóa cache. Hiện tại, giả sử một cơ chế vô hiệu hóa dựa trên TTL đơn giản.
     - **Thực hành tốt nhất:** Sử dụng `@CacheEvict` hoặc các cuộc gọi quản lý cache rõ ràng. Đối với caching phân tán, hãy cân nhắc vô hiệu hóa dựa trên sự kiện.
 
 ## Tiến độ
 
-*   **Cấu hình Caching:** [ ]
-*   **Triển khai Caching:** [ ]
-*   **Vô hiệu hóa Cache (Cân nhắc):** [ ]
+*   **Cấu hình Caching:** [x]
+*   **Triển khai Caching:** [x]
+*   **Vô hiệu hóa Cache (Cân nhắc):** [x]
 
 ## Phụ thuộc
 

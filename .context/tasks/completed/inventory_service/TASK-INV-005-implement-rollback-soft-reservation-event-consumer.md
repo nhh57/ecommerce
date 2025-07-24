@@ -1,9 +1,9 @@
 ---
 title: Triển khai Consumer Sự kiện Hoàn trả Giữ chỗ Tồn kho Tạm thời (Rollback Soft Reservation)
 type: task
-status: planned
+status: completed
 created: 2025-07-24T03:29:29
-updated: 2025-07-24T03:29:29
+updated: 2025-07-24T08:21:35
 id: TASK-INV-005
 priority: high
 memory_types: [procedural]
@@ -26,20 +26,20 @@ Triển khai logic để tiêu thụ các sự kiện `order.payment.failed` t�
 ## Danh sách kiểm tra
 
 ### Kafka Consumer Setup
-- [ ] **Cấu hình Kafka Listener:**
+- [x] **Cấu hình Kafka Listener:**
     - **Ghi chú:** Thêm các thuộc tính consumer Kafka vào `application.properties`/`application.yml` (ví dụ: `spring.kafka.consumer.bootstrap-servers`, `group-id`, `auto-offset-reset`).
     - **Vị trí:** `src/main/resources/application.properties` hoặc `application.yml`.
     - **Thực hành tốt nhất:** Sử dụng một nhóm consumer chuyên dụng cho Dịch vụ Kho hàng.
-- [ ] **Tạo lớp Kafka Listener cho `order.payment.failed`:**
+- [x] **Tạo lớp Kafka Listener cho `order.payment.failed`:**
     - **Ghi chú:** Chú thích một phương thức với `@KafkaListener(topics = "order.payment.failed", groupId = "inventory-service-payment-failed-consumer")`.
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/listener/OrderPaymentFailedListener.java` (hoặc tương tự).
     - **Thực hành tốt nhất:** Giữ listener methods tập trung vào việc tiêu thụ và ủy quyền cho một lớp dịch vụ để xử lý.
 
 ### Logic Xử lý Rollback Soft Reservation
-- [ ] **Định nghĩa cấu trúc thông báo sự kiện `order.payment.failed`:**
+- [x] **Định nghĩa cấu trúc thông báo sự kiện `order.payment.failed`:**
     - **Ghi chú:** Hiểu cấu trúc JSON/Avro/Protobuf mong đợi của sự kiện `order.payment.failed` (ví dụ: `{ "orderId": ..., "items": [{ "productId": ..., "quantity": ... }] }`).
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/event/OrderPaymentFailedEvent.java`.
-- [ ] **Triển khai logic hoàn trả tồn kho tạm thời:**
+- [x] **Triển khai logic hoàn trả tồn kho tạm thời:**
     - **Ghi chú:** Trong phương thức Kafka listener, trích xuất `productId` và `quantity` từ sự kiện.
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/service/InventoryService.java` (thêm phương thức như `rollbackSoftReservation(Long productId, int quantity, Long orderId)`).
     - **Thực hành tốt nhất:**
@@ -47,14 +47,14 @@ Triển khai logic để tiêu thụ các sự kiện `order.payment.failed` t�
         *   Tăng `AvailableQuantity` và giảm `ReservedQuantity` trong `Inventory` entity.
         *   Tạo bản ghi `InventoryLog` cho thao tác Rollback Soft Reservation.
         *   Đảm bảo thao tác là bất biến (idempotent).
-- [ ] **Xuất bản sự kiện `inventory.updated`:**
+- [x] **Xuất bản sự kiện `inventory.updated`:**
     - **Ghi chú:** Sau khi hoàn trả tồn kho tạm thời thành công, xuất bản một sự kiện `inventory.updated` với `productId` và `newQuantity`.
     - **Thực hành tốt nhất:** Đảm bảo sự kiện này được gửi đi để đồng bộ hóa các dịch vụ khác (ví dụ: Product Service).
 
 ## Tiến độ
 
-*   **Kafka Consumer Setup:** [ ]
-*   **Logic Xử lý Rollback Soft Reservation:** [ ]
+*   **Kafka Consumer Setup:** [x]
+*   **Logic Xử lý Rollback Soft Reservation:** [x]
 
 ## Phụ thuộc
 

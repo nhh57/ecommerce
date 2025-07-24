@@ -1,5 +1,7 @@
 package com.ecommerce.productservice.controller;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.ecommerce.productservice.dto.ProductDTO;
 import com.ecommerce.productservice.service.ProductService;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/products")
 public class ProductController {
 

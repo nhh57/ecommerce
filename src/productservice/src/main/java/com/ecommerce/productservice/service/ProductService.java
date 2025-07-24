@@ -1,5 +1,9 @@
 package com.ecommerce.productservice.service;
 
+import org.springframework.cache.annotation.Cacheable;
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.ecommerce.productservice.dto.ProductAttributeDTO;
 import com.ecommerce.productservice.dto.ProductDTO;
 import com.ecommerce.productservice.model.Product;
@@ -13,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -21,15 +26,19 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    @Cacheable("products")
     @Transactional(readOnly = true)
     public List<ProductDTO> getAllProducts() {
+        log.info("Fetching all products from database.");
         return productRepository.findAll().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "product", key = "#id")
     @Transactional(readOnly = true)
     public ProductDTO getProductById(Long id) {
+        log.info("Fetching product by ID {} from database.", id);
         Optional<Product> productOptional = productRepository.findById(id);
         return productOptional.map(this::convertToDto).orElse(null); // Or throw a custom exception
     }

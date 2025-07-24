@@ -1,6 +1,9 @@
 package com.ecommerce.orderservice.service;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.ecommerce.orderservice.client.InventoryServiceClient;
+import com.ecommerce.orderservice.client.PaymentServiceClient;
 import com.ecommerce.orderservice.dto.*;
 import com.ecommerce.orderservice.model.Order;
 import com.ecommerce.orderservice.model.OrderItem;
@@ -15,16 +18,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderStatusHistoryRepository orderStatusHistoryRepository;
     private final InventoryServiceClient inventoryServiceClient;
+    private final PaymentServiceClient paymentServiceClient;
 
-    public OrderService(OrderRepository orderRepository, OrderStatusHistoryRepository orderStatusHistoryRepository, InventoryServiceClient inventoryServiceClient) {
+    public OrderService(OrderRepository orderRepository, OrderStatusHistoryRepository orderStatusHistoryRepository,
+                            InventoryServiceClient inventoryServiceClient, PaymentServiceClient paymentServiceClient) {
         this.orderRepository = orderRepository;
         this.orderStatusHistoryRepository = orderStatusHistoryRepository;
         this.inventoryServiceClient = inventoryServiceClient;
+        this.paymentServiceClient = paymentServiceClient;
     }
 
     @Transactional
@@ -55,6 +62,20 @@ public class OrderService {
         order.setUserId(request.getUserId());
         order.setTotalAmount(request.getTotalAmount());
         order.setStatus("PENDING_PAYMENT"); // Initial status
+
+        // 3. Process Payment
+        PaymentRequestDTO paymentRequest = new PaymentRequestDTO(order.getId(), request.getUserId(), request.getTotalAmount(), "USD"); // Assuming USD
+        log.info("Sending payment request for orderId: {}", order.getId());
+        PaymentResponseDTO paymentResponse = paymentServiceClient.processPayment(paymentRequest);
+
+        if (!paymentResponse.isSuccess()) {
+            // In a real system, you might want to rollback soft reservations here
+            log.error("Payment failed for orderId: {}. Reason: {}", order.getId(), paymentResponse.getMessage());
+            return new OrderCreationResponseDTO(order.getId(), "PAYMENT_FAILED", paymentResponse.getMessage());
+        }
+
+        order.setPaymentId(paymentResponse.getTransactionId());
+        order.setStatus("PAID"); // Update status to PAID after successful payment
 
         // Create Order Items
         Order finalOrder = order;
@@ -125,5 +146,29 @@ public class OrderService {
                 itemDTOs,
                 historyDTOs
         );
+    }
+    @Transactional
+    public OrderDetailsDTO processPaymentCallback(Long orderId, PaymentResponseDTO paymentResponse) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
+
+        String oldStatus = order.getStatus();
+        if (paymentResponse.isSuccess()) {
+            order.setStatus("PAID");
+            order.setPaymentId(paymentResponse.getTransactionId());
+            log.info("Order {} status updated to PAID. Transaction ID: {}", orderId, paymentResponse.getTransactionId());
+        } else {
+            order.setStatus("PAYMENT_FAILED");
+            log.warn("Order {} payment failed. Reason: {}", orderId, paymentResponse.getMessage());
+        }
+        order = orderRepository.save(order);
+
+        OrderStatusHistory statusHistory = new OrderStatusHistory(order, oldStatus, order.getStatus());
+        orderStatusHistoryRepository.save(statusHistory);
+
+        // In a real system, you might want to publish an event here (e.g., order.paid, order.paymentFailed)
+        // for other services to react (e.g., Inventory Service to hard reserve, Notification Service to send confirmation)
+
+        return convertToOrderDetailsDTO(order);
     }
 }
