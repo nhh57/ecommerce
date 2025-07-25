@@ -1,0 +1,107 @@
+version: '3.2'
+
+networks:
+  pre-event-member-mysql:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:8.0.33
+    container_name: pre-event-member-mysql
+    restart: always
+    volumes:
+      - ./data/db_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d/
+    command: [
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+      '--skip-character-set-client-handshake'  # Buộc tất cả kết nối sử dụng utf8mb4
+    ]
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: ticket
+      MYSQL_PASSWORD: root1234
+    ports:
+      - "3316:3306"
+    networks:
+      - pre-event-member-mysql
+
+  #Redis
+  redis:
+    container_name: pre-event-redis
+    image: redis:6.2
+    platform: linux/amd64
+    ports:
+      - "6319:6379"
+    networks:
+      - pre-event-member-mysql
+  zookeeper:
+    image: quay.io/debezium/zookeeper:2.7
+    container_name: demo_zookeeper
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - pre-event-member-mysql
+  rabbitmq-service:
+    image: rabbitmq:3.10.5-management
+    container_name: rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    restart: always
+    networks:
+      - pre-event-member-mysql
+
+  kafka:
+    image: quay.io/debezium/kafka:2.7
+    container_name: demo_kafka
+    ports:
+      - "9092:9092"
+    links:
+      - zookeeper
+    environment:
+      - ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_BROKER_ID=1
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    networks:
+      - pre-event-member-mysql
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: demo_kafka-ui
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: demo_kafka:9092
+    ports:
+      - "9089:8080"
+    links:
+      - kafka
+    networks:
+      - pre-event-member-mysql
+
+  connect:
+    image: quay.io/debezium/connect:2.7
+    container_name: demo_connect
+    ports:
+      - "8083:8083"
+    links:
+      - kafka
+      - mysql
+    environment:
+      - BOOTSTRAP_SERVERS=kafka:9092
+      - GROUP_ID=1
+      - CONFIG_STORAGE_TOPIC=my_connect_configs
+      - OFFSET_STORAGE_TOPIC=my_connect_offsets
+      - STATUS_STORAGE_TOPIC=my_connect_statuses
+    networks:
+      - pre-event-member-mysql
