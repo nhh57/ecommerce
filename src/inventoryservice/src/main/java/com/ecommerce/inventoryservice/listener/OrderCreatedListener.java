@@ -1,6 +1,6 @@
 package com.ecommerce.inventoryservice.listener;
 
-import com.ecommerce.inventoryservice.event.OrderCreatedEvent;
+import com.ecommerce.shared.event.OrderCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 
 import com.ecommerce.inventoryservice.service.InventoryService;

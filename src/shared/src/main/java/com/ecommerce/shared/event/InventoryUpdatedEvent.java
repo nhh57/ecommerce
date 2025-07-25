@@ -1,4 +1,4 @@
-package com.ecommerce.productservice.event;
+package com.ecommerce.shared.event;
 
 public class InventoryUpdatedEvent {
     private Long productId;

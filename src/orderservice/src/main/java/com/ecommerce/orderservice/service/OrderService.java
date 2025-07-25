@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.ecommerce.orderservice.client.InventoryServiceClient;
 import com.ecommerce.orderservice.client.PaymentServiceClient;
 import com.ecommerce.orderservice.dto.*;
-import com.ecommerce.orderservice.event.OrderCreatedEvent;
+import com.ecommerce.shared.event.OrderCreatedEvent;
 import com.ecommerce.orderservice.model.Order;
 import com.ecommerce.orderservice.model.OrderItem;
 import com.ecommerce.orderservice.model.OrderStatusHistory;

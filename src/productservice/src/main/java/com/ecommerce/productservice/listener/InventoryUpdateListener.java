@@ -2,7 +2,7 @@ package com.ecommerce.productservice.listener;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.ecommerce.productservice.event.InventoryUpdatedEvent;
+import com.ecommerce.shared.event.InventoryUpdatedEvent;
 import com.ecommerce.productservice.service.ProductService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;

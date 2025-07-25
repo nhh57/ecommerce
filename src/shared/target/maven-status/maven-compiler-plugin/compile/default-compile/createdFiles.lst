@@ -1,0 +1,3 @@
+com\ecommerce\shared\event\OrderCreatedEvent$OrderItemEvent.class
+com\ecommerce\shared\event\OrderCreatedEvent.class
+com\ecommerce\shared\event\InventoryUpdatedEvent.class

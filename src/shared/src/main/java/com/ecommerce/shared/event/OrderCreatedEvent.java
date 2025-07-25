@@ -1,4 +1,4 @@
-package com.ecommerce.orderservice.event;
+package com.ecommerce.shared.event;
 
 import java.util.List;
 

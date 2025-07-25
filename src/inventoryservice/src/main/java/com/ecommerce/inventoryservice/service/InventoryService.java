@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import com.ecommerce.inventoryservice.event.InventoryUpdatedEvent;
+import com.ecommerce.shared.event.InventoryUpdatedEvent;
 
 @Service
 @Slf4j

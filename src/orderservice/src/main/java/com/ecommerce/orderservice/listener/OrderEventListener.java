@@ -1,6 +1,6 @@
 package com.ecommerce.orderservice.listener;
 
-import com.ecommerce.orderservice.event.OrderCreatedEvent; // Example event, might need other event DTOs
+import com.ecommerce.shared.event.OrderCreatedEvent; // Example event, might need other event DTOs
 import com.ecommerce.orderservice.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
