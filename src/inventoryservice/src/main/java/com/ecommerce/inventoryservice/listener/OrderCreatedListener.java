@@ -18,7 +18,7 @@ public class OrderCreatedListener {
     }
 
     @KafkaListener(topics = "order.created", groupId = "inventory-service-order-consumer")
-    public void listen(OrderCreatedEvent event) { // Change type to OrderCreatedEvent from orderservice package
+    public void listen(OrderCreatedEvent event) {
         System.out.println("Received OrderCreatedEvent: " + event);
         // Assuming OrderCreatedEvent contains a list of order items
         event.getItems().forEach(item -> {

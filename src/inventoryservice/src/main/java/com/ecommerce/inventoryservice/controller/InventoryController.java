@@ -7,6 +7,8 @@ import com.ecommerce.inventoryservice.dto.SoftReserveResponseDTO;
 import com.ecommerce.inventoryservice.service.InventoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,16 @@ public class InventoryController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/{productId}")
+    public ResponseEntity<SoftReserveResponseDTO> getInventory(@PathVariable Long productId) {
+        // SoftReserveResponseDTO is reused here to return current available quantity and a message
+        SoftReserveResponseDTO response = inventoryService.getInventory(productId);
+        if (response.isSuccess()) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND); // Or other appropriate status
         }
     }
 }

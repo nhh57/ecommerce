@@ -1,5 +1,8 @@
 package com.ecommerce.orderservice.dto;
 
+import lombok.ToString;
+
+@ToString
 public class SoftReserveRequestDTO {
     private Long productId;
     private Integer quantity;

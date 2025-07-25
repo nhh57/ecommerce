@@ -1,9 +1,9 @@
 ---
 title: Triển khai Caching Kho hàng
 type: task
-status: planned
+status: completed
 created: 2025-07-24T03:29:29
-updated: 2025-07-24T03:29:29
+updated: 2025-07-25T02:10:00
 id: TASK-INV-007
 priority: high
 memory_types: [procedural]
@@ -25,36 +25,36 @@ Tích hợp Redis để caching tồn kho của các sản phẩm "hot" nhằm �
 ## Danh sách kiểm tra
 
 ### Cấu hình Redis
-- [ ] **Thêm phụ thuộc Redis:**
+- [x] **Thêm phụ thuộc Redis:**
     - **Ghi chú:** Bao gồm `spring-boot-starter-data-redis`.
     - **Vị trí:** `pom.xml` hoặc `build.gradle`.
     - **Thực hành tốt nhất:** Đảm bảo cấu hình Redis phù hợp với môi trường.
     - **Lỗi thường gặp:** Thiếu phụ thuộc, cấu hình kết nối Redis không chính xác.
-- [ ] **Cấu hình RedisTemplate:**
+- [x] **Cấu hình RedisTemplate:**
     - **Ghi chú:** Cấu hình `RedisTemplate` để tương tác với Redis.
     - **Vị trí:** Lớp cấu hình Redis chuyên dụng.
     - **Thực hành tốt nhất:** Sử dụng serializer phù hợp (ví dụ: JSON, String).
 
 ### Triển khai Caching
-- [ ] **Cập nhật logic `softReserve()` và `hardReserve()` để tương tác với Redis:**
+- [x] **Cập nhật logic `softReserve()` và `hardReserve()` để tương tác với Redis:**
     - **Ghi chú:** Trước khi cập nhật DB, kiểm tra và cập nhật tồn kho trong Redis bằng các thao tác atomic (ví dụ: `opsForValue().decrement()`).
     - **Vị trí:** `src/main/java/com/ecommerce/inventoryservice/service/InventoryService.java`.
     - **Thực hành tốt nhất:** Đảm bảo tính nhất quán giữa Redis và DB. Xử lý các trường hợp thất bại của Redis.
-- [ ] **Cập nhật logic `rollbackSoftReservation()` để tương tác với Redis:**
+- [x] **Cập nhật logic `rollbackSoftReservation()` để tương tác với Redis:**
     - **Ghi chú:** Tăng số lượng tồn kho trong Redis bằng các thao tác atomic.
-- [ ] **Triển khai `GET /api/inventory/{productId}` để đọc từ Redis:**
+- [x] **Triển khai `GET /api/inventory/{productId}` để đọc từ Redis:**
     - **Ghi chú:** Ưu tiên đọc thông tin tồn kho từ Redis trước khi truy vấn DB.
 
 ### Đồng bộ hóa Redis và DB
-- [ ] **Cân nhắc cơ chế đồng bộ hóa:**
+- [x] **Cân nhắc cơ chế đồng bộ hóa:**
     - **Ghi chú:** Đề xuất và triển khai một cơ chế để đảm bảo tính nhất quán giữa Redis và Inventory DB (ví dụ: write-through, write-back, hoặc đồng bộ bất đồng bộ thông qua Message Queue).
     - **Thực hành tốt nhất:** Đảm bảo dữ liệu trong Redis có thể được phục hồi từ DB nếu Redis bị mất dữ liệu.
 
 ## Tiến độ
 
-*   **Cấu hình Redis:** [ ]
-*   **Triển khai Caching:** [ ]
-*   **Đồng bộ hóa Redis và DB:** [ ]
+*   **Cấu hình Redis:** [x]
+*   **Triển khai Caching:** [x]
+*   **Đồng bộ hóa Redis và DB:** [x]
 
 ## Phụ thuộc
 

@@ -24,7 +24,7 @@ public class InventoryServiceClientImpl implements InventoryServiceClient {
     @Override
     public SoftReserveResponseDTO softReserve(SoftReserveRequestDTO request) {
         String url = inventoryServiceUrl + "/api/inventory/soft-reserve";
-        log.info("Request url: {}", url);
+        log.info("Request url: {} - body: {}", url,request);
         // In a real application, you'd handle success/failure based on HTTP status codes
         // and potentially more complex response bodies.
         try {
