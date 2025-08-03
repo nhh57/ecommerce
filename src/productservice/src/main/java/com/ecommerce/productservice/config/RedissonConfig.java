@@ -14,7 +14,7 @@ public class RedissonConfig {
     public RedissonClient redissonClient() {
         Config config = new Config();
         config.useSingleServer()
-              .setAddress("redis://10.56.66.54:6319")
+              .setAddress("redis://localhost:6319")
               .setDatabase(0); // Default Redis database
 
         // Use JsonJacksonCodec for serialization/deserialization
